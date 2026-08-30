@@ -3,84 +3,100 @@ import { motion } from "framer-motion";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function OnboardingScreen() {
-  const { user, updateName } = useAuth();
   const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { updateName } = useAuth();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) {
-      setError("Please enter your name.");
+      setError("Please enter your name");
       return;
     }
+    setLoading(true);
     updateName(trimmed);
+    setLoading(false);
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
-      {/* Logo */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8 text-center"
-      >
-        <div className="text-5xl mb-3">🛡️</div>
-        <h1 className="text-3xl font-extrabold text-slate-800">
-          Skill<span className="text-brand-600">Proof</span>
-        </h1>
-      </motion.div>
+    <div className="min-h-screen flex items-center justify-center bg-mesh px-4 py-8">
+      {/* Background decoration */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-brand-100/20 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-indigo-100/15 rounded-full blur-3xl" />
+      </div>
 
-      {/* Card */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="w-full max-w-sm bg-white rounded-2xl shadow-lg border border-slate-100 p-6"
+        initial={{ opacity: 0, y: 24, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full max-w-md"
       >
-        <div className="text-center mb-6">
-          <h2 className="text-xl font-extrabold text-slate-800">
-            👋 Welcome to SkillProof!
-          </h2>
-          <p className="text-slate-500 text-sm mt-1">
-            What should we call you?
+        {/* Brand mark */}
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+          className="flex justify-center mb-8"
+        >
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center shadow-xl shadow-brand-200/50">
+            <span className="text-3xl">👋</span>
+          </div>
+        </motion.div>
+
+        {/* Card */}
+        <div className="bg-white rounded-3xl p-8 sm:p-10 shadow-xl shadow-slate-200/40 text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight mb-2">
+              Welcome to SkillProof!
+            </h1>
+            <p className="text-slate-400 text-sm sm:text-base mb-8 max-w-xs mx-auto leading-relaxed">
+              Let's personalize your experience. What should we call you?
+            </p>
+          </motion.div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => { setName(e.target.value); setError(""); }}
+                placeholder="Enter your name"
+                autoFocus
+                className="w-full text-center text-lg px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 text-slate-800 placeholder:text-slate-300 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-all font-medium"
+              />
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-rose-500 text-sm font-medium mt-2"
+                >
+                  {error}
+                </motion.p>
+              )}
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              type="submit"
+              disabled={loading || !name.trim()}
+              className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-200/40 hover:shadow-xl hover:shadow-brand-300/40 transition-all"
+            >
+              {loading ? "Setting up..." : "Let's Get Started →"}
+            </motion.button>
+          </form>
+
+          <p className="text-[11px] text-slate-300 mt-6">
+            You can always change this later
           </p>
         </div>
-
-        {error && (
-          <div className="mb-4 px-3 py-2.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-sm">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
-              Your Name
-            </label>
-            <input
-              type="text"
-              required
-              autoFocus
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                if (error) setError("");
-              }}
-              placeholder="e.g. Alex"
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-200 focus:border-brand-400 transition-all"
-            />
-          </div>
-
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-500 to-indigo-500 text-white font-bold text-sm shadow-lg shadow-brand-200 cursor-pointer hover:shadow-xl transition-shadow"
-          >
-            Let's Get Started →
-          </motion.button>
-        </form>
       </motion.div>
     </div>
   );

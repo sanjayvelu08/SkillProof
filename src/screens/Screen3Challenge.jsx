@@ -1,205 +1,140 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import ProjectCard from "../components/ProjectCard";
-import ScoreRing from "../components/ScoreRing";
 import SuccessOverlay from "../components/SuccessOverlay";
-import { selectProject, calculateReadiness } from "../utils/scoring";
 
 export default function Screen3Challenge({
-  role,
-  userSkills,
+  project: initialProject,
+  activeSkills,
   readinessScore,
   onCompleteProject,
   completedProjectIds,
-  projectProofs,
+  proof,
   onSaveProof,
-  onBack,
 }) {
-  const project = selectProject(role, userSkills);
-
-  const [isCompleted, setIsCompleted] = useState(
-    () => !!(project && completedProjectIds?.includes(project.id))
-  );
   const [showSuccess, setShowSuccess] = useState(false);
+  const [oldScore, setOldScore] = useState(readinessScore);
   const [newScore, setNewScore] = useState(readinessScore);
+  const [upgradedSkills, setUpgradedSkills] = useState([]);
 
-  // Restore newScore from completedProjectSkills if project was already done
-  useEffect(() => {
-    if (isCompleted) {
-      const calculated = calculateReadiness(role, userSkills);
-      setNewScore(calculated);
-    }
-  }, []);
+  const project = initialProject;
+  const isCompleted = project ? completedProjectIds[project.id] : false;
+
+  function handleComplete(upgraded) {
+    const prev = readinessScore;
+    setOldScore(prev);
+
+    const newScoreCalc = Math.min(100, prev + Math.round(upgraded.length * 8));
+    setNewScore(newScoreCalc);
+    setUpgradedSkills(upgraded.map((u) => u.name));
+    setShowSuccess(true);
+    onCompleteProject(upgraded);
+  }
 
   if (!project) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-slate-500">No project available for this profile.</p>
+      <div className="max-w-2xl mx-auto text-center py-20">
+        <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-emerald-50 flex items-center justify-center">
+          <span className="text-3xl">🎉</span>
+        </div>
+        <h2 className="text-xl font-bold text-slate-800 mb-2 tracking-tight">
+          All challenges completed!
+        </h2>
+        <p className="text-sm text-slate-400 max-w-sm mx-auto">
+          You've completed every available challenge for this career path. 
+          Great work building your evidence portfolio!
+        </p>
       </div>
     );
   }
 
-  function handleComplete() {
-    // Simulate upgrading claimed/missing skills to demonstrated
-    const upgradedSkills = [];
-
-    const updatedSkills = userSkills.map((s) => {
-      if (
-        project.demonstrates.some(
-          (ps) => ps.toLowerCase() === s.name.toLowerCase()
-        ) &&
-        s.evidence !== "demonstrated"
-      ) {
-        upgradedSkills.push(s.name);
-        return { ...s, evidence: "demonstrated" };
-      }
-      return s;
-    });
-
-    // Also add any project skills that were missing entirely
-    for (const ps of project.demonstrates) {
-      const exists = updatedSkills.some(
-        (us) => us.name.toLowerCase() === ps.toLowerCase()
-      );
-      if (!exists) {
-        updatedSkills.push({ name: ps, evidence: "demonstrated" });
-        upgradedSkills.push(ps);
-      }
-    }
-
-    if (upgradedSkills.length === 0) {
-      // Fallback: upgrade the first non-demonstrated skill
-      for (let i = 0; i < updatedSkills.length; i++) {
-        if (updatedSkills[i].evidence !== "demonstrated") {
-          updatedSkills[i] = {
-            ...updatedSkills[i],
-            evidence: "demonstrated",
-          };
-          upgradedSkills.push(updatedSkills[i].name);
-          break;
-        }
-      }
-    }
-
-    // Calculate new score
-    const calculated = calculateReadiness(role, updatedSkills);
-
-    setNewScore(calculated);
-    setIsCompleted(true);
-    setShowSuccess(true);
-    onCompleteProject(updatedSkills, upgradedSkills, project.id);
-  }
-
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <div className="text-center pt-10 pb-4 px-4">
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* ─── Mission Header ────────────────────────────── */}
+      {!isCompleted && (
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4"
+          className="text-center pt-2"
         >
-          🚀 Step 3 of 3
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 text-brand-600 text-xs font-semibold mb-4">
+            <div className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse" />
+            Active Challenge
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight mb-2">
+            Prove Your Skills
+          </h1>
+          <p className="text-sm text-slate-400 max-w-md mx-auto">
+            Complete this project and submit your proof to demonstrate your abilities.
+          </p>
         </motion.div>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+      )}
+
+      {isCompleted && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-3xl md:text-4xl font-extrabold text-slate-800"
+          className="text-center pt-2"
         >
-          Prove Your <span className="text-brand-600">Skills</span>
-        </motion.h1>
-        <motion.p
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-xs font-semibold mb-4">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            Challenge Completed
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight mb-2">
+            Skill Proven!
+          </h1>
+          <p className="text-sm text-slate-400 max-w-md mx-auto">
+            You've successfully demonstrated your skills through this project.
+          </p>
+        </motion.div>
+      )}
+
+      {/* ─── Project Card ──────────────────────────────── */}
+      <ProjectCard
+        project={project}
+        onComplete={handleComplete}
+        isCompleted={isCompleted}
+        proof={proof}
+        onSaveProof={onSaveProof}
+      />
+
+      {/* ─── Score Context ─────────────────────────────── */}
+      {!isCompleted && (
+        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-slate-500 mt-2 max-w-md mx-auto"
+          transition={{ delay: 0.4 }}
+          className="bg-white rounded-2xl p-5 shadow-sm"
         >
-          Complete this personalized project to demonstrate your skills and
-          boost your readiness score.
-        </motion.p>
-      </div>
-
-      <div className="flex-1 max-w-2xl mx-auto w-full px-4 pb-12 sm:pb-10 space-y-6">
-        {/* Current score reminder */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2 }}
-          className="flex justify-center"
-        >
-          <ScoreRing
-            score={isCompleted ? newScore : readinessScore}
-            label={isCompleted ? "Updated Readiness" : "Current Readiness"}
-          />
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-slate-400">Current readiness</span>
+            <span className="font-bold text-slate-700 tabular-nums">{readinessScore}%</span>
+          </div>
+          <div className="w-full h-1.5 bg-slate-100 rounded-full mt-2 overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-brand-400 to-brand-600 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${readinessScore}%` }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+            />
+          </div>
+          <p className="text-[11px] text-slate-300 mt-2">
+            Complete this challenge to improve your readiness score
+          </p>
         </motion.div>
+      )}
 
-        {/* Project card */}
-        <ProjectCard
-          project={project}
-          onComplete={handleComplete}
-          isCompleted={isCompleted}
-          proof={projectProofs?.[project.id] || null}
-          onSaveProof={(proof) => onSaveProof(project.id, proof)}
+      {/* ─── Success Overlay ───────────────────────────── */}
+      {showSuccess && (
+        <SuccessOverlay
+          oldScore={oldScore}
+          newScore={newScore}
+          upgradedSkills={upgradedSkills}
+          onDismiss={() => setShowSuccess(false)}
         />
-
-        {/* Navigation */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="flex items-center justify-between pt-2"
-        >
-          <button
-            onClick={onBack}
-            className="text-sm text-slate-400 hover:text-slate-600 cursor-pointer transition-colors"
-          >
-            ← Back to Analysis
-          </button>
-          {isCompleted && (
-            <motion.button
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={onBack}
-              className="px-6 py-3 rounded-xl bg-emerald-500 text-white font-bold text-sm shadow-lg shadow-emerald-200 cursor-pointer"
-            >
-              View Updated Score ←
-            </motion.button>
-          )}
-        </motion.div>
-      </div>
-
-      {/* Success overlay */}
-      <AnimatePresence>
-        {showSuccess && (
-          <SuccessOverlay
-            oldScore={readinessScore}
-            newScore={newScore}
-            upgradedSkills={
-              project.demonstrates.filter(
-                (s) =>
-                  !userSkills.some(
-                    (us) =>
-                      us.name.toLowerCase() === s.toLowerCase() &&
-                      us.evidence === "demonstrated"
-                  )
-              ).length > 0
-                ? project.demonstrates.filter(
-                    (s) =>
-                      !userSkills.some(
-                        (us) =>
-                          us.name.toLowerCase() === s.toLowerCase() &&
-                          us.evidence === "demonstrated"
-                      )
-                  )
-                : [project.demonstrates[0]]
-            }
-            onDismiss={() => setShowSuccess(false)}
-          />
-        )}
-      </AnimatePresence>
+      )}
     </div>
   );
 }

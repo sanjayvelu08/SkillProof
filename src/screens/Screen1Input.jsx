@@ -1,121 +1,161 @@
 import { motion } from "framer-motion";
+import { ROLE_LIST } from "../data/roles";
 import RoleCard from "../components/RoleCard";
 import SkillSelector from "../components/SkillSelector";
-import { ROLE_LIST } from "../data/roles";
 
 export default function Screen1Input({
-  selectedRole,
+  selectedRoleId,
   onSelectRole,
   userSkills,
   onToggleSkill,
   onChangeEvidence,
-  onNext,
+  onAnalyze,
+  canAnalyze,
 }) {
-  const selectedRoleData = ROLE_LIST.find((r) => r.id === selectedRole);
-  const hasSkills = userSkills.length > 0;
+  const selectedRole = ROLE_LIST.find((r) => r.id === selectedRoleId);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <div className="text-center pt-10 pb-6 px-4">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4"
-        >
-          🌱 Step 1 of 3
-        </motion.div>
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-3xl md:text-4xl font-extrabold text-slate-800"
-        >
-          Tell Us About <span className="text-brand-600">Yourself</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-slate-500 mt-2 max-w-md mx-auto"
-        >
-          Pick your target role, then tell us what skills you have — and how
-          strong they are.
-        </motion.p>
-      </div>
+    <div className="max-w-3xl mx-auto space-y-8 sm:space-y-10">
+      {/* ─── Hero Header ──────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center pt-4 sm:pt-6"
+      >
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight mb-2">
+          {selectedRoleId ? "Now, tell us your skills" : "What's your target career?"}
+        </h1>
+        <p className="text-sm sm:text-base text-slate-400 max-w-md mx-auto">
+          {selectedRoleId
+            ? "Select the skills you have and rate your evidence level honestly."
+            : "Choose the role you're working toward. We'll analyze what you need to get there."}
+        </p>
+      </motion.div>
 
-      <div className="flex-1 max-w-3xl mx-auto w-full px-4 pb-12 sm:pb-10 space-y-8">
-        {/* Role selection */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-        >
-          <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
-            🎯 Choose your target career
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {ROLE_LIST.map((role) => (
-              <RoleCard
+      {/* ─── Role Selection ────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+      >
+        {!selectedRoleId && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {ROLE_LIST.map((role, i) => (
+              <motion.div
                 key={role.id}
-                role={role}
-                isSelected={selectedRole === role.id}
-                onClick={() => onSelectRole(role.id)}
-              />
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + i * 0.08 }}
+              >
+                <RoleCard
+                  role={role}
+                  isSelected={selectedRoleId === role.id}
+                  onClick={() => onSelectRole(role.id)}
+                />
+              </motion.div>
             ))}
           </div>
-        </motion.section>
-
-        {/* Skill selection */}
-        {selectedRoleData && (
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
-              🛠️ Select your skills & evidence level
-            </h2>
-            <p className="text-xs text-slate-400 mb-4">
-              Click a skill to add it, then choose your evidence level.
-              Required skills for{" "}
-              <strong>{selectedRoleData.title}</strong> are shown below.
-            </p>
-
-            <SkillSelector
-              skills={selectedRoleData.skills}
-              userSkills={userSkills}
-              onToggleSkill={onToggleSkill}
-              onChangeEvidence={onChangeEvidence}
-            />
-
-            {hasSkills && (
-              <p className="mt-3 text-xs text-slate-400">
-                {userSkills.length} of {selectedRoleData.skills.length} skills
-                selected
-              </p>
-            )}
-          </motion.section>
         )}
 
-        {/* CTA */}
-        {selectedRole && hasSkills && (
+        {selectedRole && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-center pt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-3 bg-white rounded-2xl p-4 sm:p-5 shadow-sm"
           >
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={onNext}
-              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-brand-500 to-indigo-500 text-white font-bold text-sm shadow-lg shadow-brand-200 cursor-pointer hover:shadow-xl transition-shadow"
+            <span className="text-2xl sm:text-3xl">{selectedRole.icon}</span>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base sm:text-lg font-bold text-slate-800">{selectedRole.title}</h3>
+              <p className="text-xs text-slate-400 truncate">{selectedRole.description}</p>
+            </div>
+            <button
+              onClick={() => onSelectRole(null)}
+              className="text-xs font-medium text-slate-400 hover:text-slate-600 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer"
             >
-              Analyze My Skills →
-            </motion.button>
+              Change
+            </button>
           </motion.div>
         )}
-      </div>
+      </motion.div>
+
+      {/* ─── Skill Selection ───────────────────────────── */}
+      {selectedRole && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-base font-bold text-slate-800">Select your skills</h2>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {userSkills.length} of {selectedRole.skills.length} selected
+              </p>
+            </div>
+            {userSkills.length > 0 && (
+              <div className="text-xs font-medium text-brand-500 bg-brand-50 px-2.5 py-1 rounded-full">
+                {Math.round((userSkills.length / selectedRole.skills.length) * 100)}% covered
+              </div>
+            )}
+          </div>
+
+          {/* Progress bar */}
+          <div className="w-full h-1 bg-slate-100 rounded-full mb-5 overflow-hidden">
+            <motion.div
+              className="h-full bg-gradient-to-r from-brand-400 to-brand-600 rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${(userSkills.length / selectedRole.skills.length) * 100}%` }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            />
+          </div>
+
+          <SkillSelector
+            skills={selectedRole.skills}
+            userSkills={userSkills}
+            onToggleSkill={onToggleSkill}
+            onChangeEvidence={onChangeEvidence}
+          />
+
+          {/* Evidence legend */}
+          <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-slate-100">
+            {[
+              { color: "bg-slate-300", label: "Claimed", desc: "I say I know this" },
+              { color: "bg-amber-400", label: "Learning", desc: "Currently developing" },
+              { color: "bg-emerald-500", label: "Demonstrated", desc: "Applied in a project" },
+            ].map((item) => (
+              <div key={item.label} className="flex items-center gap-1.5">
+                <div className={`w-2 h-2 rounded-full ${item.color}`} />
+                <span className="text-[11px] text-slate-500 font-medium">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+
+      {/* ─── CTA ───────────────────────────────────────── */}
+      {selectedRole && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="flex justify-center pb-8"
+        >
+          <motion.button
+            whileHover={canAnalyze ? { scale: 1.02 } : {}}
+            whileTap={canAnalyze ? { scale: 0.98 } : {}}
+            onClick={onAnalyze}
+            disabled={!canAnalyze}
+            className={`px-8 py-3.5 rounded-xl font-semibold text-sm transition-all ${
+              canAnalyze
+                ? "bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-200/50 hover:shadow-xl hover:shadow-brand-300/50 cursor-pointer"
+                : "bg-slate-100 text-slate-400 cursor-not-allowed"
+            }`}
+          >
+            Analyze My Skills →
+          </motion.button>
+        </motion.div>
+      )}
     </div>
   );
 }

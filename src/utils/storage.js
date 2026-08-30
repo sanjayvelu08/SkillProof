@@ -15,8 +15,8 @@ const DEFAULT_STATE = {
   screen: 1,
   selectedRoleId: null,
   userSkills: [],
-  completedProjectSkills: null,
-  completedProjectIds: [],
+  completedProjectSkills: [],
+  completedProjectIds: {},
   projectProofs: {},
 };
 
@@ -25,7 +25,7 @@ export function loadProgress() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return { ...DEFAULT_STATE };
     const parsed = JSON.parse(raw);
-    return { ...DEFAULT_STATE, ...parsed };
+    return { ...DEFAULT_STATE, ...parsed, completedProjectSkills: parsed.completedProjectSkills || [], completedProjectIds: parsed.completedProjectIds || {} };
   } catch {
     return { ...DEFAULT_STATE };
   }
