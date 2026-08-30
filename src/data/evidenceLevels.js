@@ -1,0 +1,48 @@
+export const EVIDENCE_LEVELS = {
+  demonstrated: {
+    label: "Demonstrated",
+    weight: 1.0,
+    color: "emerald",
+    bg: "bg-emerald-100",
+    text: "text-emerald-700",
+    border: "border-emerald-300",
+    ring: "ring-emerald-200",
+    emoji: "🟢",
+    description: "You've built something with this skill",
+  },
+  learning: {
+    label: "Learning",
+    weight: 0.6,
+    color: "amber",
+    bg: "bg-amber-100",
+    text: "text-amber-700",
+    border: "border-amber-300",
+    ring: "ring-amber-200",
+    emoji: "🟡",
+    description: "You're actively developing this skill",
+  },
+  claimed: {
+    label: "Claimed",
+    weight: 0.3,
+    color: "slate",
+    bg: "bg-slate-100",
+    text: "text-slate-600",
+    border: "border-slate-300",
+    ring: "ring-slate-200",
+    emoji: "⚪",
+    description: "You say you know this but haven't proven it",
+  },
+  missing: {
+    label: "Missing",
+    weight: 0.0,
+    color: "rose",
+    bg: "bg-rose-50",
+    text: "text-rose-600",
+    border: "border-rose-200",
+    ring: "ring-rose-100",
+    emoji: "🔴",
+    description: "Required but you don't have it yet",
+  },
+};
+
+export const EVIDENCE_OPTIONS = ["demonstrated", "learning", "claimed"];
