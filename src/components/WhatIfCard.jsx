@@ -34,7 +34,7 @@ export default function WhatIfCard({ role, userSkills, currentScore }) {
         ⚡ Potential Improvement
       </p>
 
-      <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center gap-3 sm:gap-4 mb-4">
         <div className="text-center">
           <div className="text-2xl font-extrabold text-slate-600">
             {currentScore}%
@@ -59,7 +59,7 @@ export default function WhatIfCard({ role, userSkills, currentScore }) {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2">
         {upgradeable.map((skill) => {
           const level = EVIDENCE_LEVELS[skill.evidence];
           const isActive = activeSkill?.toLowerCase() === skill.name.toLowerCase();

@@ -3,7 +3,7 @@ import { EVIDENCE_LEVELS, EVIDENCE_OPTIONS } from "../data/evidenceLevels";
 
 export default function SkillSelector({ skills, userSkills, onToggleSkill, onChangeEvidence }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <div className="flex flex-wrap gap-2">
         {skills.map((skill) => {
           const userSkill = userSkills.find(
@@ -30,8 +30,8 @@ export default function SkillSelector({ skills, userSkills, onToggleSkill, onCha
                 <button
                   onClick={() => onToggleSkill(skill.name)}
                   className={`
-                    text-sm font-medium cursor-pointer transition-colors
-                    ${isSelected ? level.text : "text-slate-500"}
+                    text-sm font-medium cursor-pointer
+                    ${isSelected ? level.text : "text-slate-500 hover:text-slate-700"}
                   `}
                 >
                   {isSelected && (

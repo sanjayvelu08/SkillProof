@@ -65,10 +65,9 @@ export default function SuccessOverlay({ oldScore, newScore, upgradedSkills, onD
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center"
-      >
-        <div className="text-6xl mb-4">🚀</div>
-        <h2 className="text-2xl font-extrabold text-slate-800 mb-2">
+        className="relative bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl text-center"
+      >          <div className="text-5xl sm:text-6xl mb-4">🚀</div>
+        <h2 className="text-xl sm:text-2xl font-extrabold text-slate-800 mb-2">
           Skill Proved!
         </h2>
         <p className="text-slate-500 text-sm mb-6">

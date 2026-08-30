@@ -44,7 +44,7 @@ export default function Screen1Input({
         </motion.p>
       </div>
 
-      <div className="flex-1 max-w-3xl mx-auto w-full px-4 pb-10 space-y-8">
+      <div className="flex-1 max-w-3xl mx-auto w-full px-4 pb-12 sm:pb-10 space-y-8">
         {/* Role selection */}
         <motion.section
           initial={{ opacity: 0, y: 20 }}

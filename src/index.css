@@ -16,10 +16,57 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
   background: linear-gradient(135deg, #f8faff 0%, #eef2ff 50%, #f0f4ff 100%);
   min-height: 100vh;
   color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global focus-visible ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-brand-400);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Remove default outline for mouse/touch users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Smooth transitions for interactive elements globally */
+button,
+a,
+input,
+select {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Utility: hide scrollbar on proof links */
+.truncate-proof {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

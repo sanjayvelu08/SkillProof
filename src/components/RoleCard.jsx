@@ -7,7 +7,7 @@ export default function RoleCard({ role, isSelected, onClick }) {
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={`
-        relative w-full text-left rounded-2xl p-6 border-2 transition-colors duration-200 cursor-pointer
+        relative w-full text-left rounded-2xl p-5 sm:p-6 border-2 transition-all duration-200 cursor-pointer
         ${
           isSelected
             ? "border-brand-500 bg-white shadow-lg shadow-brand-100"

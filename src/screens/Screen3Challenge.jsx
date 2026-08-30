@@ -11,6 +11,8 @@ export default function Screen3Challenge({
   readinessScore,
   onCompleteProject,
   completedProjectIds,
+  projectProofs,
+  onSaveProof,
   onBack,
 }) {
   const project = selectProject(role, userSkills);
@@ -118,7 +120,7 @@ export default function Screen3Challenge({
         </motion.p>
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto w-full px-4 pb-10 space-y-6">
+      <div className="flex-1 max-w-2xl mx-auto w-full px-4 pb-12 sm:pb-10 space-y-6">
         {/* Current score reminder */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -137,6 +139,8 @@ export default function Screen3Challenge({
           project={project}
           onComplete={handleComplete}
           isCompleted={isCompleted}
+          proof={projectProofs?.[project.id] || null}
+          onSaveProof={(proof) => onSaveProof(project.id, proof)}
         />
 
         {/* Navigation */}

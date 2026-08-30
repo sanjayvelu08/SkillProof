@@ -17,6 +17,7 @@ const DEFAULT_STATE = {
   userSkills: [],
   completedProjectSkills: null,
   completedProjectIds: [],
+  projectProofs: {},
 };
 
 export function loadProgress() {
@@ -38,6 +39,7 @@ export function saveProgress(state) {
       userSkills: state.userSkills,
       completedProjectSkills: state.completedProjectSkills,
       completedProjectIds: state.completedProjectIds,
+      projectProofs: state.projectProofs,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
   } catch {

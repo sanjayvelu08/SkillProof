@@ -40,13 +40,13 @@ export default function SkillBreakdown({ role, userSkills }) {
               {tier.skills.map((skill) => (
                 <div
                   key={skill.name}
-                  className={`flex items-center justify-between px-3 py-2 rounded-lg ${level.bg}/50 border ${level.border}/40`}
+                  className={`flex items-center justify-between px-3 py-2 rounded-lg ${level.bg}/60 border ${level.border}/50`}
                 >
                   <span className={`text-sm font-medium ${level.text}`}>
                     {skill.name}
                   </span>
                   <div className="flex items-center gap-2">
-                    <div className="w-16 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                    <div className="w-12 sm:w-16 h-1.5 bg-slate-200 rounded-full overflow-hidden">
                       <motion.div
                         className="h-full rounded-full"
                         style={{ backgroundColor: level.stroke || "#94a3b8" }}

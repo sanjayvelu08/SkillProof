@@ -6,7 +6,7 @@ export default function InsightCard({ insight }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4 }}
-      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-50 to-indigo-50 border border-brand-100 p-5"
+      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-50 to-indigo-50 border border-brand-100 p-4 sm:p-5"
     >
       <div className="absolute top-3 right-3 text-3xl opacity-20 select-none">
         💡

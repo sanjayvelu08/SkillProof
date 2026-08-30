@@ -43,7 +43,7 @@ export default function Screen2Analysis({
         </motion.p>
       </div>
 
-      <div className="flex-1 max-w-2xl mx-auto w-full px-4 pb-10 space-y-6">
+      <div className="flex-1 max-w-2xl mx-auto w-full px-4 pb-12 sm:pb-10 space-y-6">
         {/* Score ring */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}

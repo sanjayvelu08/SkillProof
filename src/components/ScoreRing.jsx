@@ -38,7 +38,7 @@ export default function ScoreRing({ score, label = "Readiness", animate = true }
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative w-36 h-36">
+      <div className="relative w-32 h-32 sm:w-36 sm:h-36">
         <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
           <circle
             cx="64"
@@ -63,7 +63,7 @@ export default function ScoreRing({ score, label = "Readiness", animate = true }
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={`text-3xl font-extrabold ${text}`}>
+          <span className={`text-2xl sm:text-3xl font-extrabold ${text}`}>
             {displayScore}%
           </span>
           <span className="text-xs text-slate-400 font-medium mt-0.5">
