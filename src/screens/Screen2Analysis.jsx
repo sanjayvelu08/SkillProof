@@ -20,75 +20,37 @@ export default function Screen2Analysis({
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden bg-gradient-to-br from-brand-600 via-brand-700 to-indigo-800 rounded-3xl p-6 sm:p-10 text-white"
+        className="bg-zinc-900 rounded-xl p-8 sm:p-10 text-white relative overflow-hidden card-shadow"
       >
-        {/* Decorative */}
-        <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-400/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl" />
-        </div>
+        {/* Subtle dot pattern */}
+        <div className="absolute inset-0 opacity-[0.15]" style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
-        <div className="relative z-10 flex flex-col sm:flex-row items-center gap-6 sm:gap-10">
+        <div className="relative z-10 flex flex-col sm:flex-row items-center gap-8 sm:gap-12">
           {/* Score ring */}
           <div className="flex-shrink-0">
-            <div className="relative w-36 h-36 sm:w-44 sm:h-44">
-              <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
-                <circle cx="64" cy="64" r="58" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="7" />
-                <motion.circle
-                  cx="64"
-                  cy="64"
-                  r="58"
-                  fill="none"
-                  stroke="#ffffff"
-                  strokeWidth="7"
-                  strokeLinecap="round"
-                  strokeDasharray={2 * Math.PI * 58}
-                  initial={{ strokeDashoffset: 2 * Math.PI * 58 }}
-                  animate={{
-                    strokeDashoffset: 2 * Math.PI * 58 - (readinessScore / 100) * 2 * Math.PI * 58,
-                  }}
-                  transition={{ duration: 1.4, ease: "easeOut" }}
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.6 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.4, type: "spring" }}
-                  className="text-4xl sm:text-5xl font-extrabold tabular-nums"
-                >
-                  {readinessScore}%
-                </motion.span>
-                <span className="text-xs text-white/60 font-medium mt-1 uppercase tracking-wide">
-                  Ready
-                </span>
-              </div>
-            </div>
+            <ScoreRing score={readinessScore} size="large" />
           </div>
 
           {/* Score details */}
           <div className="flex-1 text-center sm:text-left">
-            <p className="text-[11px] font-semibold text-white/50 uppercase tracking-widest mb-2">
-              Career Readiness
-            </p>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight mb-3">
-              Your {role.title} Readiness
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-brand-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-white/10">
+              <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
+              Skill Intelligence Report
+            </div>
+            
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-6">
+              {role.title} Readiness
             </h1>
 
-            <div className="flex flex-wrap gap-4 sm:gap-6 justify-center sm:justify-start">
-              <div className="text-center">
-                <div className="text-2xl font-bold">{demonstrated}</div>
-                <div className="text-[11px] text-white/50 font-medium">Proven</div>
+            <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-sm mx-auto sm:mx-0">
+              <div>
+                <div className="text-2xl font-mono font-bold text-emerald-400 mb-1">{demonstrated}</div>
+                <div className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">Proven</div>
               </div>
-              <div className="w-px bg-white/15" />
-              <div className="text-center">
-                <div className="text-2xl font-bold">{totalSkills}</div>
-                <div className="text-[11px] text-white/50 font-medium">Required</div>
-              </div>
-              <div className="w-px bg-white/15" />
-              <div className="text-center">
-                <div className="text-2xl font-bold">{totalSkills - demonstrated}</div>
-                <div className="text-[11px] text-white/50 font-medium">To Prove</div>
+              <div className="w-px bg-white/10 mx-auto" />
+              <div>
+                <div className="text-2xl font-mono font-bold text-white mb-1">{totalSkills}</div>
+                <div className="text-xs text-zinc-400 uppercase tracking-wider font-semibold">Required</div>
               </div>
             </div>
           </div>
@@ -108,18 +70,25 @@ export default function Screen2Analysis({
 
       {/* ─── Two-Column Analysis ──────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        {/* Skill Breakdown — wider */}
+        {/* Skill Breakdown */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="lg:col-span-3 bg-white rounded-2xl p-5 sm:p-6 shadow-sm"
+          className="lg:col-span-3 bg-white rounded-xl p-6 card-shadow card-border"
         >
-          <h2 className="text-sm font-bold text-slate-800 mb-4">Skill Breakdown</h2>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-zinc-900">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
+            </div>
+            <h2 className="text-base font-bold text-zinc-900">Skill Breakdown</h2>
+          </div>
           <SkillBreakdown role={role} userSkills={userSkills} />
         </motion.div>
 
-        {/* What If — narrower */}
+        {/* What If */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -135,16 +104,14 @@ export default function Screen2Analysis({
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="flex justify-center pb-4"
+        className="flex justify-center pb-8"
       >
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+        <button
           onClick={onGetChallenge}
-          className="px-8 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm shadow-lg shadow-brand-200/50 hover:shadow-xl hover:shadow-brand-300/50 cursor-pointer transition-all"
+          className="px-8 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-semibold text-sm shadow-md cursor-pointer transition-colors"
         >
           Get My Challenge →
-        </motion.button>
+        </button>
       </motion.div>
     </div>
   );

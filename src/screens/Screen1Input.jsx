@@ -22,10 +22,10 @@ export default function Screen1Input({
         animate={{ opacity: 1, y: 0 }}
         className="text-center pt-4 sm:pt-6"
       >
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight mb-2">
-          {selectedRoleId ? "Now, tell us your skills" : "What's your target career?"}
+        <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 tracking-tight mb-2">
+          {selectedRoleId ? "Identify your skills" : "What's your target career?"}
         </h1>
-        <p className="text-sm sm:text-base text-slate-400 max-w-md mx-auto">
+        <p className="text-sm sm:text-base text-zinc-500 max-w-md mx-auto">
           {selectedRoleId
             ? "Select the skills you have and rate your evidence level honestly."
             : "Choose the role you're working toward. We'll analyze what you need to get there."}
@@ -61,16 +61,18 @@ export default function Screen1Input({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-3 bg-white rounded-2xl p-4 sm:p-5 shadow-sm"
+            className="flex items-center gap-4 bg-white rounded-xl p-4 sm:p-5 card-shadow card-border"
           >
-            <span className="text-2xl sm:text-3xl">{selectedRole.icon}</span>
+            <div className="w-12 h-12 rounded-lg bg-zinc-100 flex items-center justify-center text-2xl flex-shrink-0">
+              {selectedRole.icon}
+            </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-base sm:text-lg font-bold text-slate-800">{selectedRole.title}</h3>
-              <p className="text-xs text-slate-400 truncate">{selectedRole.description}</p>
+              <h3 className="text-base font-bold text-zinc-900">{selectedRole.title}</h3>
+              <p className="text-xs text-zinc-500 truncate">{selectedRole.description}</p>
             </div>
             <button
               onClick={() => onSelectRole(null)}
-              className="text-xs font-medium text-slate-400 hover:text-slate-600 px-3 py-1.5 rounded-lg hover:bg-slate-50 cursor-pointer"
+              className="text-xs font-medium text-zinc-500 hover:text-zinc-900 px-3 py-1.5 rounded-md hover:bg-zinc-100 transition-colors"
             >
               Change
             </button>
@@ -84,26 +86,21 @@ export default function Screen1Input({
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm"
+          className="bg-white rounded-xl p-5 sm:p-6 card-shadow card-border"
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-base font-bold text-slate-800">Select your skills</h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {userSkills.length} of {selectedRole.skills.length} selected
+              <h2 className="text-base font-bold text-zinc-900">Skill Assessment</h2>
+              <p className="text-xs text-zinc-500 mt-1 font-mono">
+                {userSkills.length}/{selectedRole.skills.length} SELECTED
               </p>
             </div>
-            {userSkills.length > 0 && (
-              <div className="text-xs font-medium text-brand-500 bg-brand-50 px-2.5 py-1 rounded-full">
-                {Math.round((userSkills.length / selectedRole.skills.length) * 100)}% covered
-              </div>
-            )}
           </div>
 
           {/* Progress bar */}
-          <div className="w-full h-1 bg-slate-100 rounded-full mb-5 overflow-hidden">
+          <div className="w-full h-1 bg-zinc-100 rounded-full mb-6 overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-brand-400 to-brand-600 rounded-full"
+              className="h-full bg-brand-500 rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${(userSkills.length / selectedRole.skills.length) * 100}%` }}
               transition={{ duration: 0.3, ease: "easeOut" }}
@@ -118,15 +115,15 @@ export default function Screen1Input({
           />
 
           {/* Evidence legend */}
-          <div className="flex flex-wrap gap-3 mt-5 pt-4 border-t border-slate-100">
+          <div className="flex flex-wrap gap-4 mt-6 pt-5 border-t border-zinc-100">
             {[
-              { color: "bg-slate-300", label: "Claimed", desc: "I say I know this" },
-              { color: "bg-amber-400", label: "Learning", desc: "Currently developing" },
-              { color: "bg-emerald-500", label: "Demonstrated", desc: "Applied in a project" },
+              { color: "bg-zinc-300", label: "Claimed", desc: "Basic knowledge" },
+              { color: "bg-amber-400", label: "Learning", desc: "Developing" },
+              { color: "bg-emerald-500", label: "Demonstrated", desc: "Applied in project" },
             ].map((item) => (
               <div key={item.label} className="flex items-center gap-1.5">
                 <div className={`w-2 h-2 rounded-full ${item.color}`} />
-                <span className="text-[11px] text-slate-500 font-medium">{item.label}</span>
+                <span className="text-[11px] text-zinc-500 font-medium">{item.label}</span>
               </div>
             ))}
           </div>
@@ -141,19 +138,17 @@ export default function Screen1Input({
           transition={{ delay: 0.3 }}
           className="flex justify-center pb-8"
         >
-          <motion.button
-            whileHover={canAnalyze ? { scale: 1.02 } : {}}
-            whileTap={canAnalyze ? { scale: 0.98 } : {}}
+          <button
             onClick={onAnalyze}
             disabled={!canAnalyze}
-            className={`px-8 py-3.5 rounded-xl font-semibold text-sm transition-all ${
+            className={`px-8 py-3 rounded-lg font-semibold text-sm transition-colors ${
               canAnalyze
-                ? "bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-200/50 hover:shadow-xl hover:shadow-brand-300/50 cursor-pointer"
-                : "bg-slate-100 text-slate-400 cursor-not-allowed"
+                ? "bg-zinc-900 hover:bg-zinc-800 text-white shadow-md cursor-pointer"
+                : "bg-zinc-100 text-zinc-400 cursor-not-allowed"
             }`}
           >
             Analyze My Skills →
-          </motion.button>
+          </button>
         </motion.div>
       )}
     </div>

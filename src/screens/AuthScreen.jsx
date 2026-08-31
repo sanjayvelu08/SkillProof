@@ -31,7 +31,7 @@ export default function AuthScreen() {
     setLoading(false);
 
     if (result.error) {
-      setError(result.error);
+      setError(result.error.message || result.error);
     }
   }
 
@@ -41,53 +41,48 @@ export default function AuthScreen() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-white">
       {/* ─── Left: Brand Panel ─────────────────────────── */}
-      <div className="hidden lg:flex lg:w-[45%] relative bg-gradient-to-br from-brand-600 via-brand-700 to-indigo-800 overflow-hidden">
-        {/* Decorative shapes */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-400/5 rounded-full blur-3xl" />
-        </div>
-
-        <div className="relative z-10 flex flex-col justify-center px-12 xl:px-16 text-white">
-          <div className="mb-10">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div className="hidden lg:flex lg:w-1/2 relative bg-zinc-900 overflow-hidden items-center justify-center">
+        {/* Subtle dot pattern */}
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+        
+        <div className="relative z-10 flex flex-col justify-center px-16 max-w-2xl text-white">
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-10">
+              <div className="w-10 h-10 rounded-lg bg-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/20">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <span className="text-2xl font-bold tracking-tight">SkillProof</span>
+              <span className="text-xl font-bold tracking-tight">SkillProof</span>
             </div>
 
-            <h1 className="text-3xl xl:text-4xl font-bold leading-tight tracking-tight mb-4">
+            <h1 className="text-4xl xl:text-5xl font-extrabold leading-tight tracking-tighter mb-6">
               Don't just list your skills.
               <br />
-              <span className="text-brand-200">Prove them.</span>
+              <span className="text-brand-400">Prove them.</span>
             </h1>
-            <p className="text-brand-200/80 text-base leading-relaxed max-w-md">
-              Discover your career readiness, identify skill gaps, and build real projects 
-              that demonstrate your abilities to employers.
+            <p className="text-zinc-400 text-lg leading-relaxed max-w-md">
+              Discover your career readiness, identify skill gaps, and build real projects that demonstrate your abilities.
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-6">
             {[
-              { icon: "📊", text: "Evidence-based skill assessment" },
-              { icon: "🎯", text: "Personalized career readiness score" },
-              { icon: "🛠️", text: "Real projects to prove your skills" },
+              { icon: "Evidence-based skill assessment", label: "01" },
+              { icon: "Personalized readiness scoring", label: "02" },
+              { icon: "Real projects to prove skills", label: "03" },
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 + i * 0.12 }}
-                className="flex items-center gap-3 text-sm text-white/80"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.1 }}
+                className="flex items-center gap-4 text-sm font-medium text-zinc-300"
               >
-                <span className="text-lg">{item.icon}</span>
-                <span>{item.text}</span>
+                <span className="font-mono text-xs text-brand-400/80">{item.label}</span>
+                <span>{item.icon}</span>
               </motion.div>
             ))}
           </div>
@@ -95,32 +90,31 @@ export default function AuthScreen() {
       </div>
 
       {/* ─── Right: Form Panel ─────────────────────────── */}
-      <div className="flex-1 flex items-center justify-center px-4 py-12 sm:py-16 lg:py-0 bg-white">
+      <div className="flex-1 flex items-center justify-center px-6 py-12 lg:py-0">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
-          className="w-full max-w-md"
+          className="w-full max-w-sm"
         >
           {/* Mobile brand */}
-          <div className="lg:hidden mb-8 text-center">
-            <div className="inline-flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center shadow-md shadow-brand-200/50">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <div className="lg:hidden mb-10 text-center">
+            <div className="inline-flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-brand-600 flex items-center justify-center">
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <span className="text-xl font-bold text-slate-800 tracking-tight">SkillProof</span>
+              <span className="text-xl font-bold text-zinc-900 tracking-tight">SkillProof</span>
             </div>
-            <p className="text-sm text-slate-400">Don't just list your skills — prove them.</p>
           </div>
 
           {/* Header */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-slate-800 tracking-tight mb-1.5">
+            <h2 className="text-2xl font-bold text-zinc-900 tracking-tight mb-2">
               {isLogin ? "Welcome back" : "Create your account"}
             </h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-zinc-500">
               {isLogin
                 ? "Sign in to continue your skill journey"
                 : "Start proving your skills today"}
@@ -128,17 +122,17 @@ export default function AuthScreen() {
           </div>
 
           {/* Mode Toggle */}
-          <div className="flex bg-slate-100 rounded-xl p-1 mb-6">
+          <div className="flex bg-zinc-100 rounded-lg p-1 mb-8">
             {["Log In", "Sign Up"].map((label, i) => {
               const active = i === 0 ? isLogin : !isLogin;
               return (
                 <button
                   key={label}
                   onClick={() => { if (!active) switchMode(); }}
-                  className={`flex-1 py-2.5 rounded-lg text-sm font-semibold cursor-pointer transition-all duration-200 ${
+                  className={`flex-1 py-2 rounded-md text-sm font-semibold cursor-pointer transition-colors ${
                     active
-                      ? "bg-white text-slate-800 shadow-sm"
-                      : "text-slate-400 hover:text-slate-600"
+                      ? "bg-white text-zinc-900 shadow-sm border border-zinc-200/50"
+                      : "text-zinc-500 hover:text-zinc-900"
                   }`}
                 >
                   {label}
@@ -148,7 +142,7 @@ export default function AuthScreen() {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <AnimatePresence mode="wait">
               {!isLogin && (
                 <motion.div
@@ -159,7 +153,7 @@ export default function AuthScreen() {
                   transition={{ duration: 0.2 }}
                   className="overflow-hidden"
                 >
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+                  <label className="block text-xs font-semibold text-zinc-600 uppercase tracking-wider mb-2">
                     Full name
                   </label>
                   <input
@@ -167,14 +161,14 @@ export default function AuthScreen() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Alex Johnson"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-all"
+                    className="w-full px-4 py-2.5 rounded-lg bg-zinc-50 border border-zinc-200 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors"
                   />
                 </motion.div>
               )}
             </AnimatePresence>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-zinc-600 uppercase tracking-wider mb-2">
                 Email address
               </label>
               <input
@@ -183,12 +177,12 @@ export default function AuthScreen() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-all"
+                className="w-full px-4 py-2.5 rounded-lg bg-zinc-50 border border-zinc-200 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5">
+              <label className="block text-xs font-semibold text-zinc-600 uppercase tracking-wider mb-2">
                 Password
               </label>
               <input
@@ -198,20 +192,17 @@ export default function AuthScreen() {
                 placeholder="••••••••"
                 required
                 minLength={6}
-                className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-800 placeholder:text-slate-300 focus:outline-none focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:border-brand-400 transition-all"
+                className="w-full px-4 py-2.5 rounded-lg bg-zinc-50 border border-zinc-200 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:bg-white focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-colors"
               />
-              {!isLogin && (
-                <p className="mt-1.5 text-[11px] text-slate-300">Minimum 6 characters</p>
-              )}
             </div>
 
             <AnimatePresence>
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  className="bg-rose-50 text-rose-600 text-sm font-medium px-4 py-3 rounded-xl"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="text-sm font-medium text-rose-600 bg-rose-50 px-4 py-3 rounded-lg border border-rose-100"
                 >
                   {error}
                 </motion.div>
@@ -221,7 +212,7 @@ export default function AuthScreen() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-200/40 hover:shadow-xl hover:shadow-brand-300/40 transition-all"
+              className="w-full py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-semibold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-2"
             >
               {loading ? (
                 <span className="inline-flex items-center gap-2">
@@ -240,7 +231,7 @@ export default function AuthScreen() {
           </form>
 
           {/* Footer */}
-          <p className="text-center text-xs text-slate-400 mt-6">
+          <p className="text-center text-sm text-zinc-500 mt-8">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button
               onClick={switchMode}

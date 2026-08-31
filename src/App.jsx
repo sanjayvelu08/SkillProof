@@ -23,23 +23,23 @@ function StepProgress({ current, labels }) {
         const isDone = i + 1 < current;
         return (
           <div key={i} className="flex items-center gap-1.5">
-            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all duration-300 ${
+            <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium transition-colors ${
               isActive
-                ? "bg-brand-600 text-white shadow-md shadow-brand-200/50"
+                ? "bg-zinc-900 text-white"
                 : isDone
-                  ? "bg-emerald-50 text-emerald-600"
-                  : "bg-slate-100 text-slate-400"
+                  ? "bg-zinc-100 text-zinc-900"
+                  : "bg-transparent text-zinc-400 border border-zinc-200"
             }`}>
               <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                isActive ? "bg-white/20" : isDone ? "bg-emerald-100" : "bg-slate-200/60"
+                isActive ? "bg-white/20" : isDone ? "bg-zinc-200" : "bg-transparent"
               }`}>
                 {isDone ? "✓" : i + 1}
               </span>
               <span className="hidden sm:inline">{label}</span>
             </div>
             {i < labels.length - 1 && (
-              <div className={`w-4 sm:w-6 h-px transition-colors duration-300 ${
-                isDone ? "bg-emerald-300" : "bg-slate-200"
+              <div className={`w-4 sm:w-6 h-px transition-colors ${
+                isDone ? "bg-zinc-300" : "bg-zinc-200"
               }`} />
             )}
           </div>
@@ -53,12 +53,12 @@ export default function App() {
   const { user, signOut } = useAuth();
 
   const saved = loadProgress();
-  const [screen, setScreen] = useState(saved.screen);
-  const [selectedRoleId, setSelectedRoleId] = useState(saved.selectedRoleId);
-  const [userSkills, setUserSkills] = useState(saved.userSkills);
-  const [completedProjectSkills, setCompletedProjectSkills] = useState(saved.completedProjectSkills);
-  const [completedProjectIds, setCompletedProjectIds] = useState(saved.completedProjectIds);
-  const [projectProofs, setProjectProofs] = useState(saved.projectProofs);
+  const [screen, setScreen] = useState(saved.screen || 1);
+  const [selectedRoleId, setSelectedRoleId] = useState(saved.selectedRoleId || null);
+  const [userSkills, setUserSkills] = useState(saved.userSkills || []);
+  const [completedProjectSkills, setCompletedProjectSkills] = useState(saved.completedProjectSkills || []);
+  const [completedProjectIds, setCompletedProjectIds] = useState(saved.completedProjectIds || {});
+  const [projectProofs, setProjectProofs] = useState(saved.projectProofs || {});
   const [showDashboard, setShowDashboard] = useState(false);
 
   useEffect(() => {
@@ -135,7 +135,7 @@ export default function App() {
     setCompletedProjectSkills([]);
     setCompletedProjectIds({});
     setProjectProofs({});
-    setScreen(0);
+    setScreen(1);
     setShowDashboard(false);
   }
 
@@ -144,7 +144,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-mesh">
       {/* ─── Top Navigation ───────────────────────────── */}
-      <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+      <nav className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-zinc-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Left: Brand */}
@@ -153,19 +153,19 @@ export default function App() {
                 onClick={handleResetProgress}
                 className="flex items-center gap-2 cursor-pointer group"
               >
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center shadow-md shadow-brand-200/50 group-hover:shadow-lg group-hover:shadow-brand-300/50 transition-shadow">
+                <div className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center group-hover:bg-brand-600 transition-colors">
                   <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                   </svg>
                 </div>
-                <span className="text-lg font-bold text-slate-800 tracking-tight hidden sm:block">
+                <span className="text-lg font-bold text-zinc-900 tracking-tight hidden sm:block">
                   Skill<span className="text-brand-600">Proof</span>
                 </span>
               </button>
 
               {selectedRoleId && (
                 <div className="hidden md:block">
-                  <StepProgress current={screen + 1} labels={screenLabels} />
+                  <StepProgress current={screen} labels={screenLabels} />
                 </div>
               )}
             </div>
@@ -174,10 +174,10 @@ export default function App() {
             <div className="flex items-center gap-2 sm:gap-3">
               <button
                 onClick={() => setShowDashboard((v) => !v)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition-colors ${
                   showDashboard
-                    ? "bg-brand-50 text-brand-600"
-                    : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                    ? "bg-zinc-100 text-zinc-900"
+                    : "text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100/50"
                 }`}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -186,18 +186,18 @@ export default function App() {
                 <span className="hidden sm:inline">Dashboard</span>
               </button>
 
-              <div className="w-px h-5 bg-slate-200 hidden sm:block" />
+              <div className="w-px h-4 bg-zinc-200 hidden sm:block" />
 
               <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-400 to-indigo-500 flex items-center justify-center text-[11px] font-bold text-white shadow-sm">
+                <div className="w-7 h-7 rounded-full bg-zinc-100 flex items-center justify-center text-[11px] font-bold text-zinc-700 border border-zinc-200">
                   {user.name?.charAt(0)?.toUpperCase()}
                 </div>
-                <span className="text-sm font-medium text-slate-600 hidden sm:block">{user.name}</span>
+                <span className="text-sm font-medium text-zinc-600 hidden sm:block">{user.name}</span>
               </div>
 
               <button
                 onClick={signOut}
-                className="text-xs font-medium text-slate-400 hover:text-slate-600 px-2 py-1 rounded-md hover:bg-slate-50 cursor-pointer"
+                className="text-xs font-medium text-zinc-400 hover:text-zinc-800 px-2 py-1 rounded-md hover:bg-zinc-50 cursor-pointer transition-colors"
               >
                 Log out
               </button>
@@ -207,8 +207,8 @@ export default function App() {
 
         {/* Mobile step progress */}
         {selectedRoleId && (
-          <div className="md:hidden border-t border-slate-50 px-4 py-2 bg-white/60">
-            <StepProgress current={screen + 1} labels={screenLabels} />
+          <div className="md:hidden border-t border-zinc-100 px-4 py-2 bg-white/60">
+            <StepProgress current={screen} labels={screenLabels} />
           </div>
         )}
       </nav>
@@ -233,7 +233,7 @@ export default function App() {
                 readinessScore={readinessScore}
               />
             </motion.div>
-          ) : screen === 0 ? (
+          ) : screen === 1 ? (
             <motion.div
               key="screen1"
               initial={{ opacity: 0, y: 8 }}
@@ -251,7 +251,7 @@ export default function App() {
                 canAnalyze={selectedRoleId && userSkills.length > 0}
               />
             </motion.div>
-          ) : screen === 1 ? (
+          ) : screen === 2 ? (
             <motion.div
               key="screen2"
               initial={{ opacity: 0, y: 8 }}
@@ -267,7 +267,7 @@ export default function App() {
                 onGetChallenge={handleGetChallenge}
               />
             </motion.div>
-          ) : (
+          ) : screen === 3 ? (
             <motion.div
               key="screen3"
               initial={{ opacity: 0, y: 8 }}
@@ -285,7 +285,7 @@ export default function App() {
                 onSaveProof={(proof) => handleSaveProof(proof)}
               />
             </motion.div>
-          )}
+          ) : null}
         </AnimatePresence>
       </main>
     </div>

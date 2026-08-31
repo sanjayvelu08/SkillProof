@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 function getScoreColor(score) {
-  if (score >= 75) return { stroke: "#10b981", text: "text-emerald-500", label: "Strong" };
-  if (score >= 50) return { stroke: "#f59e0b", text: "text-amber-500", label: "Growing" };
-  if (score >= 25) return { stroke: "#f97316", text: "text-orange-500", label: "Early" };
-  return { stroke: "#ef4444", text: "text-rose-400", label: "Just Starting" };
+  if (score >= 75) return { stroke: "#34d399", text: "text-emerald-400", label: "Strong" };
+  if (score >= 50) return { stroke: "#fbbf24", text: "text-amber-400", label: "Growing" };
+  if (score >= 25) return { stroke: "#f97316", text: "text-orange-400", label: "Early" };
+  return { stroke: "#f87171", text: "text-rose-400", label: "Just Starting" };
 }
 
-export default function ScoreRing({ score, label = "Readiness", animate = true, size = "default" }) {
+export default function ScoreRing({ score, label = "Readiness", animate = true, size = "default", theme = "dark" }) {
   const [displayScore, setDisplayScore] = useState(animate ? 0 : score);
   const { stroke, text, label: statusLabel } = getScoreColor(score);
 
@@ -35,21 +35,24 @@ export default function ScoreRing({ score, label = "Readiness", animate = true, 
     requestAnimationFrame(tick);
   }, [score, animate]);
 
-  const sizeClass = size === "large" ? "w-40 h-40 sm:w-44 sm:h-44" : "w-32 h-32 sm:w-36 sm:h-36";
-  const fontSize = size === "large" ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl";
+  const sizeClass = size === "large" ? "w-40 h-40 sm:w-48 sm:h-48" : "w-32 h-32 sm:w-36 sm:h-36";
+  const fontSize = size === "large" ? "text-4xl sm:text-5xl" : "text-2xl sm:text-3xl";
+  const bgStroke = theme === "dark" ? "rgba(255,255,255,0.1)" : "#f4f4f5";
+  const textColor = theme === "dark" ? "text-white" : "text-zinc-900";
+  const labelColor = theme === "dark" ? "text-zinc-400" : "text-zinc-500";
 
   return (
     <div className="flex flex-col items-center">
       <div className={`relative ${sizeClass}`}>
         <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
-          <circle cx="64" cy="64" r={radius} fill="none" stroke="#f1f5f9" strokeWidth="7" />
+          <circle cx="64" cy="64" r={radius} fill="none" stroke={bgStroke} strokeWidth="6" />
           <motion.circle
             cx="64"
             cy="64"
             r={radius}
             fill="none"
             stroke={stroke}
-            strokeWidth="7"
+            strokeWidth="6"
             strokeLinecap="round"
             strokeDasharray={circumference}
             initial={{ strokeDashoffset: circumference }}
@@ -58,15 +61,14 @@ export default function ScoreRing({ score, label = "Readiness", animate = true, 
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className={`${fontSize} font-extrabold tabular-nums ${text}`}>
+          <span className={`${fontSize} font-mono font-bold tabular-nums ${textColor}`}>
             {displayScore}%
           </span>
-          <span className="text-[11px] text-slate-400 font-medium mt-0.5">
+          <span className={`text-[11px] font-semibold mt-1 uppercase tracking-widest ${labelColor}`}>
             {statusLabel}
           </span>
         </div>
       </div>
-      <p className="mt-3 text-xs font-semibold text-slate-400 uppercase tracking-widest">{label}</p>
     </div>
   );
 }

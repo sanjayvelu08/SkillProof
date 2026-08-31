@@ -17,31 +17,25 @@ export default function SkillSelector({ skills, userSkills, onToggleSkill, onCha
             key={skill.name}
             layout
             className={`
-              relative rounded-xl transition-all duration-200
+              relative rounded-md transition-all duration-200 border
               ${
                 isSelected
-                  ? `${level.bg} shadow-sm`
-                  : "bg-slate-50 hover:bg-slate-100/80 hover:shadow-sm"
+                  ? "bg-zinc-900 border-zinc-900 text-white"
+                  : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50"
               }
             `}
           >
-            <div className="flex items-center gap-1.5 px-3 py-2">
+            <div className="flex items-center gap-1.5 px-3 py-1.5">
               <button
                 onClick={() => onToggleSkill(skill.name)}
-                className={`
-                  text-sm font-medium cursor-pointer
-                  ${isSelected ? level.text : "text-slate-500 hover:text-slate-700"}
-                `}
+                className="text-xs font-semibold cursor-pointer text-inherit"
               >
-                {isSelected && (
-                  <span className="mr-1">{level.emoji}</span>
-                )}
                 {skill.name}
               </button>
               {isSelected && (
                 <button
                   onClick={() => onToggleSkill(skill.name)}
-                  className="ml-0.5 text-slate-300 hover:text-slate-500 cursor-pointer p-0.5 rounded-full hover:bg-white/60"
+                  className="ml-1 text-zinc-400 hover:text-white cursor-pointer transition-colors"
                   title="Remove skill"
                 >
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -57,25 +51,26 @@ export default function SkillSelector({ skills, userSkills, onToggleSkill, onCha
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden"
+                  className="overflow-hidden bg-zinc-800 rounded-b-md"
                 >
-                  <div className="flex gap-1 px-3 pb-2.5 pt-0.5">
+                  <div className="flex gap-0.5 px-1 pb-1 pt-1 border-t border-zinc-700">
                     {EVIDENCE_OPTIONS.map((opt) => {
                       const optLevel = EVIDENCE_LEVELS[opt];
+                      const isActive = evidence === opt;
                       return (
                         <button
                           key={opt}
                           onClick={() => onChangeEvidence(skill.name, opt)}
                           className={`
-                            text-[11px] font-medium px-2 py-1 rounded-lg cursor-pointer transition-all
+                            flex-1 text-[10px] font-bold px-1.5 py-1 rounded transition-colors uppercase tracking-wider cursor-pointer
                             ${
-                              evidence === opt
-                                ? `${optLevel.bg} ${optLevel.text}`
-                                : "text-slate-400 hover:text-slate-600 hover:bg-white/60"
+                              isActive
+                                ? "bg-brand-500 text-white"
+                                : "text-zinc-400 hover:text-white hover:bg-zinc-700"
                             }
                           `}
                         >
-                          {optLevel.emoji} {optLevel.label}
+                          {optLevel.label}
                         </button>
                       );
                     })}
